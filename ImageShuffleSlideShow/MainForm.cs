@@ -1,5 +1,6 @@
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using Path = System.IO.Path;
 
 namespace ImageShuffleSlideShow
@@ -21,6 +22,7 @@ namespace ImageShuffleSlideShow
         /* Listbox */
         int hoveredIndex = -1;
         List<string> imagePaths = new List<string>();
+        List<string> FilteredimagePaths = new List<string>();
 
         List<string> beforeSearch = new List<string>();
         List<string> searchResult = new List<string>();
@@ -557,15 +559,21 @@ namespace ImageShuffleSlideShow
 
         private void btnStartSlideShow_Click(object sender, EventArgs e)
         {
+            List<string> paramPathList = new List<string>();
             int paramIndex = 0;
 
+            // When user selected row
             var selectedItem = ImgFilesInPath.SelectedItem;
             if (selectedItem != null)
-            {
                 paramIndex = ImgFilesInPath.SelectedIndex;
-            }
 
-            using (var ImgSlideShow = new ImageSlide(imagePaths, paramIndex))
+            // When user searching
+            if (txtBoxSearch.Text != language.txtSearchPlaceholder)
+                paramPathList = FilteredimagePaths;
+            else
+                paramPathList = imagePaths;
+
+            using (var ImgSlideShow = new ImageSlide(paramPathList, paramIndex))
             {
                 ImgSlideShow.ShowDialog();
             }
@@ -573,18 +581,31 @@ namespace ImageShuffleSlideShow
 
         private void btnShuffle_Click(object sender, EventArgs e)
         {
-            ClearSearchText();
-
             if (imagePaths.Count > 0)
             {
                 Random rand = new Random();
-                imagePaths = imagePaths.OrderBy(item => rand.Next()).ToList();
 
-                ImgFilesInPath.Items.Clear();
-
-                foreach (var imagePath in imagePaths)
+                // When user searching then
+                if (txtBoxSearch.Text != language.txtSearchPlaceholder)
                 {
-                    ImgFilesInPath.Items.Add(Path.GetFileName(imagePath));
+                    FilteredimagePaths = imagePaths.Where(args => searchResult.Any(keyword => args.Contains(keyword))).ToList();
+                    FilteredimagePaths = FilteredimagePaths.OrderBy(item => rand.Next()).ToList();
+                    ImgFilesInPath.Items.Clear();
+
+                    foreach (var imagePath in FilteredimagePaths)
+                    {
+                        ImgFilesInPath.Items.Add(Path.GetFileName(imagePath));
+                    }
+                }
+                else
+                {
+                    imagePaths = imagePaths.OrderBy(item => rand.Next()).ToList();
+                    ImgFilesInPath.Items.Clear();
+
+                    foreach (var imagePath in imagePaths)
+                    {
+                        ImgFilesInPath.Items.Add(Path.GetFileName(imagePath));
+                    }
                 }
 
                 SetImgPreviewImage();
@@ -598,8 +619,8 @@ namespace ImageShuffleSlideShow
             {
                 if (PreviewImg != selectedItem.ToString())
                 {
-                    int currentIndex = ImgFilesInPath.SelectedIndex;
-                    string selectedPath = imagePaths[currentIndex];
+                    int currentIndex = currentIndex = ImgFilesInPath.SelectedIndex;
+                    string selectedPath = txtBoxSearch.Text == language.txtSearchPlaceholder ? imagePaths[currentIndex] : FilteredimagePaths[currentIndex];
 
                     ImgPreview.Images.Clear();
                     ImageSlide otherClass = new ImageSlide();
@@ -616,6 +637,67 @@ namespace ImageShuffleSlideShow
                 }
             }
         }
+
+        private void ImgFilesInPath_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetImgPreviewImage();
+        }
+
+        #region Search
+        private void txtBoxSearch_TextChanged(object sender, EventArgs e)
+        {
+            Thread.Sleep(40);
+
+            if (beforeSearch.Count > 0)
+            {
+                if (txtBoxSearch.Text == language.txtSearchPlaceholder)
+                {
+                    FilteredimagePaths.Clear();
+                    return;
+                }
+
+                ImgFilesInPath.Items.Clear();
+
+                if (GetNullToEmpty(txtBoxSearch.Text).Trim() != string.Empty)
+                {
+                    string stxt = txtBoxSearch.Text;
+                    searchResult = beforeSearch.Where(txt => txt.ToLower().Contains(stxt.ToLower())).ToList();
+
+                    ImgFilesInPath.Items.AddRange(searchResult.ToArray());
+                    FilteredimagePaths = imagePaths.Where(args => searchResult.Any(keyword => args.Contains(keyword))).ToList();
+                }
+                else
+                {
+                    ImgFilesInPath.Items.AddRange(beforeSearch.ToArray());
+                }
+            }
+        }
+
+        #region Search textbox placeholder
+        private void txtBoxSearch_Enter(object sender, EventArgs e)
+        {
+            if (txtBoxSearch.Text == this.language.txtSearchPlaceholder)
+            {
+                txtBoxSearch.Text = string.Empty;
+                txtBoxSearch.ForeColor = Color.Black;
+            }
+        }
+
+        private void txtBoxSearch_Leave(object sender, EventArgs e)
+        {
+            if (txtBoxSearch.Text == string.Empty)
+            {
+                ClearSearchText();
+            }
+        }
+        #endregion
+
+        private void ClearSearchText()
+        {
+            txtBoxSearch.Text = this.language.txtSearchPlaceholder;
+            txtBoxSearch.ForeColor = Color.DarkGray;
+        }
+        #endregion
 
         private Color InterpolateColor(Color from, Color to, float amount)
         {
@@ -641,60 +723,5 @@ namespace ImageShuffleSlideShow
                 return obj.ToString();
             }
         }
-
-        private void ImgFilesInPath_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SetImgPreviewImage();
-        }
-
-        #region Search
-        private void txtBoxSearch_TextChanged(object sender, EventArgs e)
-        {
-            Thread.Sleep(40);
-
-            if (beforeSearch.Count > 0)
-            {
-                if (txtBoxSearch.Text == language.txtSearchPlaceholder)
-                    return;
-
-                ImgFilesInPath.Items.Clear();
-
-                if (GetNullToEmpty(txtBoxSearch.Text).Trim() != string.Empty)
-                {
-                    string stxt = txtBoxSearch.Text;
-                    searchResult = beforeSearch.Where(txt => txt.ToLower().Contains(stxt.ToLower())).ToList();
-
-                    ImgFilesInPath.Items.AddRange(searchResult.ToArray());
-                }
-                else
-                {
-                    ImgFilesInPath.Items.AddRange(beforeSearch.ToArray());
-                }
-            }
-        }
-
-        private void txtBoxSearch_Enter(object sender, EventArgs e)
-        {
-            if (txtBoxSearch.Text == this.language.txtSearchPlaceholder)
-            {
-                txtBoxSearch.Text = string.Empty;
-                txtBoxSearch.ForeColor = Color.Black;
-            }
-        }
-
-        private void txtBoxSearch_Leave(object sender, EventArgs e)
-        {
-            if (txtBoxSearch.Text == string.Empty)
-            {
-                ClearSearchText();
-            }
-        }
-
-        private void ClearSearchText()
-        {
-            txtBoxSearch.Text = this.language.txtSearchPlaceholder;
-            txtBoxSearch.ForeColor = Color.DarkGray;
-        }
-        #endregion
     }
 }
