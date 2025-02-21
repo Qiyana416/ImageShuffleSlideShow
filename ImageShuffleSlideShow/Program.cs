@@ -17,8 +17,10 @@ namespace ImageShuffleSlideShow
             ApplicationConfiguration.Initialize();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
             Application.Run(new MainForm());
-
         }
 
         private static Assembly ResolveAssembly(object sender, ResolveEventArgs args)
