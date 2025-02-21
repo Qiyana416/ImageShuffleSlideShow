@@ -54,7 +54,12 @@ namespace ImageShuffleSlideShow
 
         private void Program_Load(object sender, EventArgs e)
         {
-            defaultProperties_DropDown(); // Dropdown close
+            // Dropdown close
+            defaultProperties_DropDown();
+
+            // Adjust UI DPI
+            float dpiFactor = GetCurrentDpiFactor();
+            AdjustUIFormDpi(dpiFactor);
         }
 
         #region Click Empty Space
@@ -296,7 +301,7 @@ namespace ImageShuffleSlideShow
             btnBrowse.Text = language.txtBrowse;
 
             /* Path valid text */
-            if (GetNullToEmpty(txtBoxBrowsePath.Text) == string.Empty)
+            if (txtBoxBrowsePath.Text.GetNullToEmpty() == string.Empty)
             {
                 labelImageExists.Text = language.choosePath;
             }
@@ -340,7 +345,7 @@ namespace ImageShuffleSlideShow
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            var folderPath = GetNullToEmpty(txtBoxBrowsePath.Text);
+            var folderPath = txtBoxBrowsePath.Text.GetNullToEmpty();
             if (folderPath == string.Empty)
             {
                 folderPath = "C:\\";
@@ -616,6 +621,8 @@ namespace ImageShuffleSlideShow
 
         private void btnStartSlideShow_Click(object sender, EventArgs e)
         {
+            #region Open Slide Show
+
             List<string> paramPathList = new List<string>();
             int paramIndex = 0;
 
@@ -634,10 +641,14 @@ namespace ImageShuffleSlideShow
             {
                 ImgSlideShow.ShowDialog();
             }
+
+            #endregion
         }
 
         private void btnShuffle_Click(object sender, EventArgs e)
         {
+            #region Image List Shuffle
+
             if (imagePaths.Count > 0)
             {
                 Random rand = new Random();
@@ -667,10 +678,14 @@ namespace ImageShuffleSlideShow
 
                 SetImgPreviewImage();
             }
+
+            #endregion
         }
 
         private void SetImgPreviewImage()
         {
+            #region Image Preview Binding
+
             var selectedItem = ImgFilesInPath.SelectedItem;
             if (selectedItem != null)
             {
@@ -693,6 +708,8 @@ namespace ImageShuffleSlideShow
                     PreviewImg = selectedItem.ToString();
                 }
             }
+
+            #endregion
         }
 
         private void ImgFilesInPath_SelectedIndexChanged(object sender, EventArgs e)
@@ -703,6 +720,8 @@ namespace ImageShuffleSlideShow
         #region Search
         private void txtBoxSearch_TextChanged(object sender, EventArgs e)
         {
+            #region Searching Keyword Apply
+
             Thread.Sleep(40);
 
             if (beforeSearch.Count > 0)
@@ -715,7 +734,7 @@ namespace ImageShuffleSlideShow
 
                 ImgFilesInPath.Items.Clear();
 
-                if (GetNullToEmpty(txtBoxSearch.Text).Trim() != string.Empty)
+                if (txtBoxBrowsePath.Text.GetNullToEmpty().Trim() != string.Empty)
                 {
                     string stxt = txtBoxSearch.Text;
                     searchResult = beforeSearch.Where(txt => txt.ToLower().Contains(stxt.ToLower())).ToList();
@@ -728,6 +747,8 @@ namespace ImageShuffleSlideShow
                     ImgFilesInPath.Items.AddRange(beforeSearch.ToArray());
                 }
             }
+
+            #endregion
         }
 
         #region Search textbox placeholder
@@ -765,20 +786,22 @@ namespace ImageShuffleSlideShow
             return Color.FromArgb(r, g, b);
         }
 
-        public string GetNullToEmpty(object obj)
+        #region Screen DPI
+
+        private float GetCurrentDpiFactor()
         {
-            if (obj == null)
+            using (Graphics g = this.CreateGraphics())
             {
-                return string.Empty;
-            }
-            else if (obj.ToString().Trim().Length == 0)
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return obj.ToString();
+                return g.DpiX / 96f;
             }
         }
+
+        private void AdjustUIFormDpi(float dpiFactor)
+        {
+            DropdownMaxHeight = (int)(DropdownMaxHeight * dpiFactor);
+            btnDropdown.Height = (int)(btnDropdown.Height * dpiFactor);
+        }
+        
+        #endregion
     }
 }
