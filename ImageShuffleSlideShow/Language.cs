@@ -46,6 +46,12 @@ namespace ImageShuffleSlideShow
                         break;
                     }
 
+                case "日本語":
+                    {
+                        setJpn();
+                        break;
+                    }
+
                 /*-------------------*/
                 default:
                     {
@@ -91,6 +97,23 @@ namespace ImageShuffleSlideShow
             this.txtPreview = "미리보기";
         }
 
+        private void setJpn()
+        {
+            this.txtBrowse = "Browse";
+            this.txtSearchPlaceholder = "検索...";
+
+            this.txtYes = "はい";
+            this.txtNo = "いいえ";
+
+            this.choosePath = "フォルダパスを決めてください。";
+            this.pathValid = "ご選択頂いたフォルダパスは使用できます。";
+            this.pathInValid = "ご選択頂いたフォルダパスは使用できません。\n(イメージファイルが存在していません。)";
+
+            this.txtCopied = "ファイル名をコピーしました！";
+
+            this.txtPreview = "プレビュー";
+        }
+
         public string formatCount(int count)
         {
             string rtnStr;
@@ -106,6 +129,12 @@ namespace ImageShuffleSlideShow
                 case "한국어":
                     {
                         rtnStr = count.ToString() + "개";
+                        break;
+                    }
+
+                case "日本語":
+                    {
+                        rtnStr = count.ToString() + "個";
                         break;
                     }
 

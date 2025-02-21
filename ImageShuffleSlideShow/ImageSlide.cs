@@ -1,34 +1,21 @@
-﻿using DevExpress.Pdf.Native;
-using DevExpress.XtraEditors;
-using DevExpress.XtraEditors.Controls;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.IO;
 using ImageMagick;
-using ImageMagick.Drawing;
+using DevExpress.XtraEditors;
 
 namespace ImageShuffleSlideShow
 {
-    public partial class ImageSlide : DevExpress.XtraEditors.XtraForm
+    public partial class ImageSlide : XtraForm
     {
         // 0 : Disable auto slide
-        private int AutoSlideSpeed = 0; // Second
+        //private int AutoSlideSpeed = 0; // Second
 
         private List<string> ImgName = new List<string>();
         private List<string> ImgPaths = new List<string>();
 
         private int currentIndex = 0;
 
-        private bool mouseEntered = false;
-        private int VisibleCooldown = 0;
+        //private bool mouseEntered = false;
+        //private int VisibleCooldown = 0;
 
         public ImageSlide()
         {
@@ -111,13 +98,18 @@ namespace ImageShuffleSlideShow
 
                         if (IsRawFile(imagePath))
                         {
-                            imageSlider.Images.Add(GetCompressedRaw(imagePath, 100));
+                            imageSlider.Images.Add(GetCompressedRaw(imagePath, 50));
                             //imageSlider.Images.Add(new Bitmap(1, 1));
                         }
-                        else
+                        else if (imagePath.Contains(".png", StringComparison.InvariantCultureIgnoreCase)
+                        || !imagePath.Contains(".jpeg", StringComparison.InvariantCultureIgnoreCase))
                         {
                             Image img = Image.FromFile(imagePath);
                             imageSlider.Images.Add(img);
+                        }
+                        else
+                        {
+                            imageSlider.Images.Add(GetCompressedRaw(imagePath, 50));
                         }
                     }
                     catch (Exception ex)

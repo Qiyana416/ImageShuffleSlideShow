@@ -45,6 +45,7 @@
             labelImageExists = new Label();
             langPanelM = new Panel();
             langPanelD = new Panel();
+            langJpn = new Button();
             langKor = new Button();
             langEng = new Button();
             btnDropdown = new Button();
@@ -199,9 +200,21 @@
             // langPanelD
             // 
             resources.ApplyResources(langPanelD, "langPanelD");
+            langPanelD.Controls.Add(langJpn);
             langPanelD.Controls.Add(langKor);
             langPanelD.Controls.Add(langEng);
             langPanelD.Name = "langPanelD";
+            // 
+            // langJpn
+            // 
+            resources.ApplyResources(langJpn, "langJpn");
+            langJpn.BackColor = Color.FromArgb(108, 117, 125);
+            langJpn.Cursor = Cursors.Hand;
+            langJpn.FlatAppearance.BorderSize = 0;
+            langJpn.ForeColor = Color.FromArgb(64, 64, 64);
+            langJpn.Name = "langJpn";
+            langJpn.UseVisualStyleBackColor = false;
+            langJpn.Click += langJpn_Click;
             // 
             // langKor
             // 
@@ -411,5 +424,6 @@
         private Label labelPreview;
         private TableLayoutPanel tableLayoutPanel2;
         private VerticalTextBox txtBoxSearch;
+        private Button langJpn;
     }
 }

@@ -12,8 +12,10 @@ namespace ImageShuffleSlideShow
         Point lastLocation;
 
         /* Dropdown */
+        int DropdownMaxHeight = 26 * 3;
         bool Dropdown_ON_OFF = false;
         int Dropdown_Speed = 6;
+        int pickedLangIndex = 0;
 
         /* File path */
         string PreviewImg = string.Empty;
@@ -38,6 +40,7 @@ namespace ImageShuffleSlideShow
 
             this.MouseClick += ClickEmptySpace;
             ChangeLanguage(btnDropdown.Text);
+            btnDropdown.MouseWheel += btnLangWheelEvent;
 
             txtBoxSearch.Text = this.language.txtSearchPlaceholder;
             txtBoxSearch.ForeColor = Color.DarkGray;
@@ -54,6 +57,7 @@ namespace ImageShuffleSlideShow
             defaultProperties_DropDown(); // Dropdown close
         }
 
+        #region Click Empty Space
         private void ClickEmptySpace(object sender, MouseEventArgs e)
         {
             /* Left Click Events */
@@ -88,6 +92,7 @@ namespace ImageShuffleSlideShow
                 }
             }
         }
+        #endregion
 
         #region Exit Button
         private void btnExitClicked(object sender, MouseEventArgs e)
@@ -134,6 +139,54 @@ namespace ImageShuffleSlideShow
             Dropdown_ON_OFF = false;
         }
 
+        private void btnLangWheelEvent(object sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+            {
+                // Wheel Up
+
+                if (pickedLangIndex > 0)
+                {
+                    pickedLangIndex--;
+                }
+                else
+                    pickedLangIndex = 1;
+            }
+
+            else if (e.Delta < 0)
+            {
+                // Wheel Down
+
+                if (pickedLangIndex < 3)
+                {
+                    pickedLangIndex++;
+                }
+            }
+
+            // Change Language
+            switch (pickedLangIndex)
+            {
+                case 1:
+                    // English
+                    ChangeLanguage(langEng.Text);
+                    break;
+
+                case 2:
+                    // ÇÑ±¹¾î
+                    ChangeLanguage(langKor.Text);
+                    break;
+
+                case 3:
+                    // Japanese
+                    ChangeLanguage(langJpn.Text);
+                    break;
+
+                default:
+                    ChangeLanguage(langEng.Text);
+                    break;
+            }
+        }
+
         private void langDropdown_Click(object sender, EventArgs e)
         {
             if (Dropdown_ON_OFF == true)
@@ -148,27 +201,26 @@ namespace ImageShuffleSlideShow
 
         private void DropDownTimer_Tick(object sender, EventArgs e)
         {
-            // Now(2024-11-08) list quantity is 2
-            int maxHeight = 52;
+            int btnHeight = btnDropdown.Height;
 
             if (Dropdown_ON_OFF == true)
             {
-                // One of list(button)'s height : 26.
-                // Current(2024-11-08) list quantity is 2
+                // One of list(button)'s height : 26(It can be change by screen size).
+                // Current(2024-11-08) list quantity is 3
 
-                // So this code will reply until height be 52.
-                if ((langPanelD.Height + Dropdown_Speed) <= maxHeight)
+                // So this code will reply until height be 78.
+                if ((langPanelD.Height + Dropdown_Speed) <= DropdownMaxHeight)
                     langPanelD.Height += Dropdown_Speed;
 
                 else
-                    langPanelD.Height = maxHeight;
+                    langPanelD.Height = DropdownMaxHeight;
 
                 // +Added master panel too
-                if ((langPanelM.Height + Dropdown_Speed) <= maxHeight + 26)
+                if ((langPanelM.Height + Dropdown_Speed) <= DropdownMaxHeight + btnHeight)
                     langPanelM.Height += Dropdown_Speed;
 
                 else
-                    langPanelM.Height = maxHeight + 26;
+                    langPanelM.Height = DropdownMaxHeight + btnHeight;
             }
 
             else if (Dropdown_ON_OFF == false)
@@ -181,11 +233,11 @@ namespace ImageShuffleSlideShow
                     langPanelD.Height = 0;
 
                 // +Added master panel too
-                if ((langPanelM.Height - Dropdown_Speed) >= 26)
+                if ((langPanelM.Height - Dropdown_Speed) >= btnHeight)
                     langPanelM.Height -= Dropdown_Speed;
 
                 else
-                    langPanelM.Height = 26;
+                    langPanelM.Height = btnHeight;
             }
         }
         #endregion
@@ -199,6 +251,11 @@ namespace ImageShuffleSlideShow
         private void langKor_Click(object sender, EventArgs e)
         {
             ChangeLanguage(langKor.Text);
+        }
+
+        private void langJpn_Click(object sender, EventArgs e)
+        {
+            ChangeLanguage(langJpn.Text);
         }
         #endregion
 

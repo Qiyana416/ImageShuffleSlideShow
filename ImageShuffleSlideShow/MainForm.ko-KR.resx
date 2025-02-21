@@ -304,6 +304,27 @@
   <data name="labelImageExists.Text" xml:space="preserve">
     <value>Please choose path your own</value>
   </data>
+  <data name="langJpn.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="langJpn.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="langJpn.Font" type="System.Drawing.Font, System.Drawing">
+    <value>한컴 말랑말랑 Regular, 9pt</value>
+  </data>
+  <data name="langJpn.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="langJpn.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="langJpn.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 26</value>
+  </data>
+  <data name="langJpn.Text" xml:space="preserve">
+    <value>日本語</value>
+  </data>
   <data name="langKor.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
   </data>
@@ -315,6 +336,9 @@
   </data>
   <data name="langKor.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
+  </data>
+  <data name="langKor.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="langKor.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 26</value>
@@ -337,6 +361,9 @@
   <data name="langEng.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
+  <data name="langEng.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
   <data name="langEng.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 26</value>
   </data>
@@ -349,8 +376,11 @@
   <data name="langPanelD.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
   </data>
+  <data name="langPanelD.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
   <data name="langPanelD.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 78</value>
+    <value>100, 104</value>
   </data>
   <data name="langPanelD.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -370,6 +400,9 @@
   <data name="btnDropdown.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
+  <data name="btnDropdown.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
   <data name="btnDropdown.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 26</value>
   </data>
@@ -385,8 +418,11 @@
   <data name="langPanelM.Location" type="System.Drawing.Point, System.Drawing">
     <value>280, 45</value>
   </data>
+  <data name="langPanelM.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
   <data name="langPanelM.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 130</value>
+    <value>100, 156</value>
   </data>
   <data name="langPanelM.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
